@@ -3,19 +3,16 @@ from src.models.pedidos import Pedido
 class PedidoService:
     """Classe de serviço para processar pedidos e aplicar descontos."""
 
-    def __init__(self):
-        self.pedidos = []
+    def __init__(self, repository):
+        # Mude de self.pedidos para self.repository para bater com os métodos abaixo
+        self.repository = repository 
 
     def adicionar_pedido(self, pedido: Pedido):
-        self.pedidos.append(pedido)
+        self.repository.adicionar_pedido(pedido)
 
     def processar_pedidos(self):
-        for pedido in self.pedidos:
-            # 1. Use o nome correto da property (getValor)
-            # 2. Chame o método valor_final passando esse valor
-            valor_bruto = pedido.getValor 
-            valor_com_desconto = pedido.valor_final(valor_bruto)
-            
+        pedidos = self.repository.listar_pedidos()
+        for pedido in pedidos:
             print(f"Cliente: {pedido.cliente}")
-            print(f"Valor Final: {valor_com_desconto}")
+            print(f"Valor Final: {pedido.valor_final(pedido.getValor)}")
 
