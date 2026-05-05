@@ -1,0 +1,12 @@
+# Ambiente virtual
+.venv/
+venv/
+env/
+
+# Arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Pasta de distribuição (se houver)
+dist/
+build/
