@@ -10,4 +10,4 @@ class Pedido:
         return self.desconto.calcular(self.valor_original)
     
     def valor_final(self) -> float:
-        return self.valor_original - self.valor_original
+        return self.valor_original - self.valor_desconto()

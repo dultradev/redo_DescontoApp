@@ -1,7 +1,11 @@
 from newsrc.app.entities.pedido import Pedido
 from newsrc.app.entities.desconto import DescontoNormal, DescontoVIP, DescontoPremium
+from newsrc.app.gateways.pedido_gateway import IPedidoGateway
 
 class CriarPedido:
+    def __init__(self, pedido_gateway: IPedidoGateway):
+        self.pedido_gateway = pedido_gateway
+
     def executar(self, cliente: str, valor_original: float, tipo_desconto: str) -> Pedido:
         if tipo_desconto.lower() == "normal":
             desconto = DescontoNormal()
@@ -10,6 +14,12 @@ class CriarPedido:
         elif tipo_desconto.lower() == "premium":
             desconto = DescontoPremium()
         else:
-            raise ValueError("Tipo de desconto inv[alido")
+            raise ValueError("Tipo de desconto inválido")
         
-        return Pedido(cliente, valor_original, desconto)
+        pedido = Pedido(cliente, valor_original, desconto)
+        self.pedido_gateway.salvar(pedido)
+
+        return pedido
+    
+    def listar_pedidos(self) -> list[Pedido]:
+        return self.pedido_gateway.listar()

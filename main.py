@@ -1,30 +1,26 @@
-from src.repositories.pedido_repository import PedidoRepository
-from src.models.desconto import DescontoNormal, DescontoVIP, DescontoPremium
-from src.models.pedidos import Pedido
-from src.services.pedido_service import PedidoService
-from src.controllers.pedido_controller import PedidoController
-from src.database.connection import DatabaseConnection
+from newsrc.app.frameworks.database.memory_database import MemoryDatabase
+from newsrc.app.adapters.repositories.memory_pedido_repository import MemoryPedidoRepository
+from newsrc.app.use_cases.criar_pedido import CriarPedido
+from newsrc.app.adapters.controllers.pedido_controller import PedidoController
+
+def main() -> None:
+    database = MemoryDatabase()
+    pedido_gateway = MemoryPedidoRepository(database)
+    criar_pedido_use_case = CriarPedido(pedido_gateway)
+    controller = PedidoController(criar_pedido_use_case)
+
+    # Criar os pedidos
+
+    pedido1 = controller.criar_pedido("Cliente A", 100.0, "normal")
+    pedido2 = controller.criar_pedido("Cliente B", 100.0, "vip")
+    pedido3 = controller.criar_pedido("Cliente C", 100.0, "premium")
+
+    print("Pedidos Criados:")
+    print(pedido1.cliente, pedido1.valor_original, pedido1.valor_final())
+    print(pedido2.cliente, pedido2.valor_original, pedido2.valor_final())
+    print(pedido3.cliente, pedido3.valor_original, pedido3.valor_final())
+
+
 
 if __name__ == "__main__":
-    database = DatabaseConnection()
-    repo = PedidoRepository(database)
-    service = PedidoService(repo)
-    controller = PedidoController(service)
-
-    """Criando pedidos e aplicando desconto"""
-
-    pedido1 = Pedido(cliente="Leonardo", desconto=DescontoVIP())
-    pedido1.setValor = 100
-
-    pedido2 = Pedido(cliente="Marcão", desconto=DescontoNormal())
-    pedido2.setValor = 200
-
-    pedido3 = Pedido(cliente="Rian", desconto=DescontoPremium())
-    pedido3.setValor = 300
-   
-
-controller.adicionar_pedido(pedido1)
-controller.adicionar_pedido(pedido2)
-controller.adicionar_pedido(pedido3)
-
-controller.processar_pedidos()
+    main()
