@@ -23,7 +23,7 @@ class CriarPedido:
 
         return CriarPedidoOutputDTO(
             cliente=input_dto.cliente,
-            valor_original=input.dto.valor_original,
+            valor_original=input_dto.valor_original,
             valor_desconto=pedido.valor_desconto(),
             valor_final=pedido.valor_final(),
             tipo_desconto=input_dto.tipo_desconto
